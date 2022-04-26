@@ -22,6 +22,12 @@ fn index() -> &'static str {
     "
 }
 
+#[get("/<id>")]
+async fn retrieve(id: &str) -> Option<File> {
+    let filename = format!("upload/{id}", id = id);
+    File::open(&filename).await.ok()
+}
+
 #[post("/", data = "<paste>")]
 async fn upload(paste: Data<'_>) -> Result<String, Debug<std::io::Error>> {
     let id = PasteId::new(3);
@@ -37,5 +43,5 @@ async fn upload(paste: Data<'_>) -> Result<String, Debug<std::io::Error>> {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index, upload])
+        .mount("/", routes![index, upload, retrieve])
 }
