@@ -1,6 +1,6 @@
 use std::fmt;
 use std::borrow::Cow;
-
+use rocket::request::FromParam;
 use rand::{self, Rng};
 
 /// Table to retrieve base62 values from.
@@ -22,6 +22,17 @@ impl<'a> PasteId<'a> {
         }
 
         PasteId(Cow::Owned(id))
+    }
+}
+
+impl<'a> FromParam<'a> for PasteId<'a> {
+    type Error = &'a str;
+
+    fn from_param(param: &'a str) -> Result<Self, Self::Error> {
+        match param.chars().all(|c| c.is_ascii_alphanumeric()) {
+            true => Ok(PasteId(param.into())),
+            false => Err(param)
+        }
     }
 }
 

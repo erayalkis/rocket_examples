@@ -23,7 +23,7 @@ fn index() -> &'static str {
 }
 
 #[get("/<id>")]
-async fn retrieve(id: &str) -> Option<File> {
+async fn retrieve(id: PasteId<'_>) -> Option<File> {
     let filename = format!("upload/{id}", id = id);
     File::open(&filename).await.ok()
 }
