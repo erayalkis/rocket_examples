@@ -3,6 +3,8 @@ mod paste_id;
 use paste_id::PasteId;
 use rocket::Data;
 use rocket::response::Debug;
+use rocket::tokio::fs::File;
+use rocket::data::ToByteUnit;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -35,5 +37,5 @@ async fn upload(paste: Data<'_>) -> Result<String, Debug<std::io::Error>> {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index])
+        .mount("/", routes![index, upload])
 }
