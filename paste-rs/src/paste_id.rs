@@ -24,3 +24,10 @@ impl<'a> PasteId<'a> {
         PasteId(Cow::Owned(id))
     }
 }
+
+impl<'a> fmt::Display for PasteId<'a> {
+
+  fn fmt(&self, f: &mut fmt::Formatter) -> std::fmt::Result {
+    write!(f, "{}", self)
+  }
+}
